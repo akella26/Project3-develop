@@ -51,7 +51,7 @@ all: Proj3-Memory.elf secondary-outputs
 Proj3-Memory.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM GNU C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb -O3 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "MKL25Z128xxx4_flash.ld" -Xlinker --gc-sections -L"/home/sowmya/ECEN5813/Kinetisprojs/Proj3-Memory/Project_Settings/Linker_Files" -Wl,-Map,"Proj3-Memory.map" -specs=nano.specs -specs=nosys.specs -o "Proj3-Memory.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "MKL25Z128xxx4_flash.ld" -Xlinker --gc-sections -L"/home/sowmya/ECEN5813/Kinetisprojs/Proj3-Memory/Project_Settings/Linker_Files" -Wl,-Map,"Proj3-Memory.map" -specs=nano.specs -specs=nosys.specs -o "Proj3-Memory.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

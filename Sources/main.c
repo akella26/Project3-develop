@@ -37,14 +37,17 @@
 
 static int i = 0;
 uint32_t stat,dummy,count1=0,count2=0,diff_count=0;
-volatile uint32_t count_cycle=0;
 
 int8_t result1 = 5, result2 = 5, result3 = 5, result4 = 5;
 
 /*Uncomment the type of profiling you would like to do*/
 
-#define MOVE      0
-#define SET       1
+#define PROFILING 		0
+#define DMA_TEST_ONLY 	1
+
+#define MOVE      		0
+#define SET       		1
+
 //#define STD_LIB_VERSION
 #define NON_DMA_O0_O3
 //#define MY_DMA
@@ -52,11 +55,13 @@ int8_t result1 = 5, result2 = 5, result3 = 5, result4 = 5;
 
 int main(void)
 {
-
 	result1 = test_memmove1();
-//	result2 = test_memmove2();
-//	result3 = test_memmove3();
-//	result4 = test_memset();
+
+#if(DMA_TEST_ONLY)
+	result2 = test_memmove2();
+	result3 = test_memmove3();
+	result4 = test_memset();
+#endif
 
 	while(1)
 	{
@@ -77,7 +82,6 @@ int8_t test_memmove1()
   uint8_t * ptrb;
   uint8_t value = 0x06;
 
-  // NO OVERLAP
   set = (uint8_t*) malloc(DMA_BUFF_SIZE*(sizeof(uint8_t)));
 
   if (! set )
@@ -86,11 +90,16 @@ int8_t test_memmove1()
   }
   ptra = &set[0];
   ptrb = &set[DMA_TRANS_BYTE_SIZE];
+
+#if(DMA_TEST_ONLY)
   /* Initialize the set to test values */
-//  for(i = 0; i < DMA_BUFF_SIZE; i++)
-//  {
-//	      set[i] = i;
-//  }
+  for(i = 0; i < DMA_BUFF_SIZE; i++)
+  {
+	      set[i] = i;
+  }
+#endif
+
+#if(PROFILING)
 
 #ifdef STD_LIB_VERSION
   	TPM_init();
@@ -132,20 +141,20 @@ int8_t test_memmove1()
 
 #endif
 
-//  for (i = 0; i < DMA_TRANS_BYTE_SIZE; i++)
-//  {
-//    if (set[i + DMA_TRANS_BYTE_SIZE] != i)
-//    {
-//      ret = DMA_TEST_ERROR;
-//    }
-//  }
-//  for (i = 0; i < DMA_TRANS_BYTE_SIZE; i++)
-//  {
-//  	    if (set[i] != value)
-//  	    {
-//  	      ret  = DMA_TEST_ERROR;
-//  	    }
-//  }
+#endif
+
+
+
+#if(DMA_TEST_ONLY)
+memmove_DMA(ptra,ptrb,DMA_TRANS_BYTE_SIZE);
+  for (i = 0; i < DMA_TRANS_BYTE_SIZE; i++)
+  {
+    if (set[i + DMA_TRANS_BYTE_SIZE] != i)
+    {
+      ret = DMA_TEST_ERROR;
+    }
+  }
+#endif
 
   free(set);
   return ret;
@@ -183,10 +192,7 @@ int8_t test_memmove2() {
       ret = DMA_TEST_ERROR;
     }
   }
-//while(1)
-//{
-//
-//}
+
   free(set);
   return ret;
 }
@@ -222,10 +228,7 @@ int8_t test_memmove3() {
       ret = DMA_TEST_ERROR;
     }
   }
-//  while(1)
-//  {
-//
-//  }
+
   free(set);
   return ret;
 
@@ -233,7 +236,7 @@ int8_t test_memmove3() {
 
 int8_t test_memset()
 {
-  uint8_t i;
+  uint32_t i;
   uint8_t ret = DMA_TEST_NO_ERROR;
   uint8_t * set;
   uint8_t * ptra;
@@ -248,7 +251,7 @@ int8_t test_memset()
   ptra = &set[0];
 
   /* Initialize the set to test values */
-  for( i = 0; i < DMA_BUFF_SIZE; i++)
+  for(i = 0; i < DMA_BUFF_SIZE; i++)
    {
      set[i] = i;
    }
@@ -264,30 +267,12 @@ int8_t test_memset()
       ret  = DMA_TEST_ERROR;
     }
   }
-
+//  while(1)
+//  {
+//
+//  }
   free(set);
   return ret;
 }
 
-void TPM_init()
-{
-	SIM_BASE_PTR->SCGC6 |= SIM_SCGC6_TPM2_MASK;        	//TPM2 USED
-	SIM_BASE_PTR->SOPT2 |= SIM_SOPT2_TPMSRC(1);        	//Clock SRC 11- MCGIRCLK
-	TPM2_BASE_PTR->SC = TPM_SC_PS(6);	 				// Prescalar of 1 to get smallest possible resolution
-	TPM2_SC |= TPM_SC_TOIE_MASK;						// Enable the counter & interrupt
-	TPM2_BASE_PTR->MOD = 0xFFFF;						//Load for high Counter value
-	NVIC_EnableIRQ(TPM2_IRQn);							//Enable TPM2 interrupt in NVIC
-}
 
-void TPM_deinit()
-{
-	TPM2_SC |= TPM_SC_CMOD(0);
-	TPM2_SC &= ~TPM_SC_TOIE_MASK;						// Enable the counter & interrupt
-}
-
-
-void TPM2_IRQHandler()
-{
-	TPM2_BASE_PTR->SC |= TPM_SC_TOF_MASK;              //Clearing TOF bit
-	count_cycle++;
-}

@@ -13,8 +13,9 @@
 #include <stdio.h>
 #include "memory.h"
 
-#define DMA_BUFF_SIZE 10000
-#define DMA_TRANS_BYTE_SIZE 5000
+//Set contains values of uint8_t type, so will not be able to test with numbers for 1000 and 5000 bytes
+#define DMA_BUFF_SIZE 200
+#define DMA_TRANS_BYTE_SIZE 100
 #define TRANS_SIZE 8
 
 #if(TRANS_SIZE == 32)
@@ -110,7 +111,8 @@ void DMA_config();
  *
  * @return void
  */
-void DMA_maskset_start();
+void DMA_maskset();
+void DMA_start();
 /**
  * @brief function to run project1 memmove overlapped test
  *
