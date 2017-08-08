@@ -2,7 +2,7 @@
 /**
  * @file dma.c
  * @brief This file is to be used to project 3.
- *
+ * Memory transfer using DMA is done here
  * @author Sowmya
  * @date Aug 2, 2017
  *
@@ -41,7 +41,7 @@ void DMA_maskset()
 	//	DMA_DCR0 |= DMA_DCR_ERQ_MASK;						//Since memory to memory peripheral request is ignored
 	DMA_DCR0 |= DMA_DCR_EADREQ_MASK;		                //Enable Async. DMA Requests
 	//	DMA_DCR0 |= DMA_DCR_CS_MASK;                        //Cycle steal mask disabled so that automatic BCR decrement occurs
-	DMA_DCR0 &= ~DMA_DCR_SINC_MASK;
+	DMA_DCR0 &= ~DMA_DCR_SINC_MASK;							//Unset the source increment mask
 	DMA_DCR0 |= DMA_DCR_DINC_MASK;                          //Increment destination
 	DMA_DCR0 |= DMA_DCR_SSIZE(DMA_NO_BYTES_TRANS_SIZE);		//1 byte transfer
 	DMA_DCR0 |= DMA_DCR_DSIZE(DMA_NO_BYTES_TRANS_SIZE);     //1 byte transfer
@@ -49,8 +49,6 @@ void DMA_maskset()
 	DMAMUX0_CHCFG0 |= DMAMUX_CHCFG_ENBL_MASK | DMAMUX_CHCFG_SOURCE(60);
 	NVIC_EnableIRQ(DMA0_IRQn);
 	__enable_irq();
-
-
 }
 
 void DMA_start()

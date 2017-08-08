@@ -13,6 +13,17 @@
 #include <stdio.h>
 #include "dma.h"
 
+/*
+initializes TPM counter with required values to be used in profiling
+Inputs - None
+Returns - None
+*/
 void TPM_init();
+
+/*
+Deinitializes the TPM counter that's used to be stop profiling
+Inputs - None
+Returns - None
+*/
 void TPM_deinit();
 #endif /* _PROFILING_H__ */
