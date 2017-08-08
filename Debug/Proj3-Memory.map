@@ -806,14 +806,14 @@ OUTPUT(Proj3-Memory.elf elf32-littlearm)
  .debug_line    0x00000953       0x7b ./Project_Settings/Startup_Code/startup_MKL25Z4.o
  .debug_line    0x000009ce      0x25d ./Project_Settings/Startup_Code/system_MKL25Z4.o
 
-.debug_str      0x00000000    0x34770
- .debug_str     0x00000000    0x344a9 ./Sources/dma.o
-                              0x34969 (size before relaxing)
- .debug_str     0x000344a9       0xfc ./Sources/main.o
-                              0x34015 (size before relaxing)
- .debug_str     0x000345a5       0x6a ./Sources/profiling.o
+.debug_str      0x00000000    0x34771
+ .debug_str     0x00000000    0x344aa ./Sources/dma.o
+                              0x3496a (size before relaxing)
+ .debug_str     0x000344aa       0xfc ./Sources/main.o
+                              0x34016 (size before relaxing)
+ .debug_str     0x000345a6       0x6a ./Sources/profiling.o
                               0x32100 (size before relaxing)
- .debug_str     0x0003460f      0x161 ./Project_Settings/Startup_Code/system_MKL25Z4.o
+ .debug_str     0x00034610      0x161 ./Project_Settings/Startup_Code/system_MKL25Z4.o
                               0x31f0e (size before relaxing)
 
 .comment        0x00000000       0x70
